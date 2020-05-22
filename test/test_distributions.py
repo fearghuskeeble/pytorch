@@ -2276,7 +2276,8 @@ class TestDistributions(TestCase):
         for loc, scale in product([-5.0, -1.0, -0.1, 0.1, 1.0, 5.0], [0.1, 1.0, 10.0]):
             self._check_sampler_sampler(Moyal(loc, scale),
                                         scipy.stats.moyal(loc=loc, scale=scale),
-                                        'Moyal(loc={}, scale={})'.format(loc, scale))
+                                        'Moyal(loc={}, scale={})'.format(loc, scale),
+                                        failure_rate=1e-4)
 
     @unittest.skipIf(not TEST_NUMPY, "NumPy not found")
     def test_fishersnedecor(self):
@@ -3509,11 +3510,13 @@ class TestKL(TestCase):
             (exponential, exponential),
             (exponential, gamma),
             (exponential, gumbel),
+            (exponential, moyal),
             (exponential, normal),
             (gamma, chi2),
             (gamma, exponential),
             (gamma, gamma),
             (gamma, gumbel),
+            (gamma, moyal),
             (gamma, normal),
             (gumbel, gumbel),
             (gumbel, normal),
@@ -3522,7 +3525,10 @@ class TestKL(TestCase):
             (laplace, laplace),
             (lognormal, lognormal),
             (laplace, normal),
+            (moyal, moyal),
+            (moyal, normal),
             (normal, gumbel),
+            (normal, moyal),
             (normal, normal),
             (onehotcategorical, onehotcategorical),
             (pareto, chi2),
@@ -3535,6 +3541,7 @@ class TestKL(TestCase):
             (uniform_positive, exponential),
             (uniform_positive, gamma),
             (uniform_real, gumbel),
+            (uniform_real, moyal),
             (uniform_real, normal),
             (uniform_pareto, pareto),
             (continuous_bernoulli, continuous_bernoulli),
@@ -3576,6 +3583,12 @@ class TestKL(TestCase):
             (Laplace(-1, 2), Gamma(3, 4)),
             (Laplace(-1, 2), Pareto(3, 4)),
             (Laplace(-1, 2), Uniform(-3, 4)),
+            (Moyal(-1, 2), Beta(3, 4)),
+            (Moyal(-1, 2), Chi2(3)),
+            (Moyal(-1, 2), Exponential(3)),
+            (Moyal(-1, 2), Gamma(3, 4)),
+            (Moyal(-1, 2), Pareto(3, 4)),
+            (Moyal(-1, 2), Uniform(-3, 4)),
             (Normal(-1, 2), Beta(3, 4)),
             (Normal(-1, 2), Chi2(3)),
             (Normal(-1, 2), Exponential(3)),
@@ -3604,6 +3617,7 @@ class TestKL(TestCase):
             (Gamma(1, 2), ContinuousBernoulli(0.75)),
             (Gumbel(-1, 2), ContinuousBernoulli(0.75)),
             (Laplace(-1, 2), ContinuousBernoulli(0.75)),
+            (Moyal(-1, 2), ContinuousBernoulli(0.75)),
             (Normal(-1, 2), ContinuousBernoulli(0.75)),
             (Uniform(-1, 1), ContinuousBernoulli(0.75)),
             (Uniform(0, 2), ContinuousBernoulli(0.75)),
