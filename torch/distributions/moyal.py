@@ -47,12 +47,6 @@ class Moyal(TransformedDistribution):
         new.scale = self.scale.expand(batch_shape)
         return super(Moyal, self).expand(batch_shape, _instance=new)
 
-    def log_prob(self, value):
-        if self._validate_args:
-            self._validate_sample(value)
-        y = (self.loc - value) / self.scale
-        return 0.5 * (y - y.exp() - math.log(2 * math.pi)) - self.scale.log()
-
     @property
     def mean(self):
         return self.loc + self.scale * (euler_constant + math.log(2))
